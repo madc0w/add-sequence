@@ -1,4 +1,4 @@
-var seq = [[0, 1], [1]];
+var seq = [0, 1];
 
 function onLoad() {
 	for (var i = 0; i < 12; i++) {
