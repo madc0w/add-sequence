@@ -1,10 +1,22 @@
-const maxIts = 12;
-
+const maxIts = 4;
 var seq = [[0, 1], [1, 1]];
 
+var outputTable;
+
 function onLoad() {
-	for (var iteration = 0; iteration < maxIts; iteration++) {
-		console.log('iteration ' + iteration);
+	outputTable = document.getElementById('output-table');
+	go();
+}
+
+function go() {
+	var iteration = 0;
+	const intervalId = setInterval(() => {
+		if (iteration > maxIts) {
+			clearInterval(intervalId);
+		}
+		iteration++;
+
+		// console.log('iteration ' + iteration);
 
 		// horizonatal
 		for (var i = 0; i < seq.length; i++) {
@@ -20,8 +32,9 @@ function onLoad() {
 			seq[i] = newSeqH;
 		}
 
-		console.log('after horizontal:');
-		displaySeq();
+		// return;
+		// console.log('after horizontal:');
+		// displaySeq();
 
 		// vertical
 		const numRows = seq.length;
@@ -46,18 +59,31 @@ function onLoad() {
 			}
 		}
 
-		console.log('after vertical:');
+		// console.log('after vertical:');
 		displaySeq();
-		console.log('finished iteration ', iteration);
-	}
+		// console.log('finished iteration ', iteration);
+	}, 100);
 }
 
 function displaySeq() {
-	for (var i in seq) {
-		var row = '';
-		for (var j in seq[i]) {
-			row += seq[i][j] + '\t';
+	var html = '';
+	for (var row in seq) {
+		html += '<tr>';
+		for (var col in seq[row]) {
+			html += `<td>${seq[row][col]}</td>`;
 		}
-		console.log(row);
+		html += '</tr>';
 	}
+	outputTable.innerHTML = html;
 }
+
+
+// function displaySeq() {
+// 	for (var i in seq) {
+// 		var row = '';
+// 		for (var j in seq[i]) {
+// 			row += seq[i][j] + '\t';
+// 		}
+// 		console.log(row);
+// 	}
+// }
