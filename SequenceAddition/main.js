@@ -1,6 +1,7 @@
-const maxIts = 4;
+const maxIts = 5;
 var seq = [[0, 1], [1, 1]];
 
+var max = 0;
 var outputTable;
 
 function onLoad() {
@@ -66,11 +67,19 @@ function go() {
 }
 
 function displaySeq() {
+	for (var row in seq) {
+		for (var col in seq[row]) {
+			max = Math.max(max, seq[row][col]);
+		}
+	}
+
 	var html = '';
 	for (var row in seq) {
 		html += '<tr>';
 		for (var col in seq[row]) {
-			html += `<td>${seq[row][col]}</td>`;
+			const val = Math.floor(256 * seq[row][col] / max).toString(16);
+			const color = val + val + val;
+			html += `<td style="background-color: #${color}"></td>`;
 		}
 		html += '</tr>';
 	}
