@@ -56,7 +56,7 @@ function displaySeq() {
 	for (var i in seq) {
 		var row = '';
 		for (var j in seq[i]) {
-			row += seq[i][j] + ' ';
+			row += seq[i][j] + '\t';
 		}
 		console.log(row);
 	}
