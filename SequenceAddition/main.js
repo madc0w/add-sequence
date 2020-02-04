@@ -1,29 +1,40 @@
-const maxIts = 9;
-var seq = [[0, 1], [1, 1]];
+var maxIts = 8;
+var seq;
 
-var canvas, ctx, imageData;
+var canvas, ctx, imageData, numItsSpan, numItsSlider, goButton, currIteration;
 var isWorking = false;
 
 function onLoad() {
 	canvas = document.getElementById('output-canvas');
-	canvas.width = window.innerWidth - 20;
-	canvas.height = window.innerHeight - 20;
 	ctx = canvas.getContext('2d');
-	imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-	go();
+	numItsSpan = document.getElementById('num-iterations-span');
+	numItsSlider = document.getElementById('num-iterations-slider');
+	goButton = document.getElementById('go-button');
+	currIteration = document.getElementById('curr-iteration');
+
+	numItsSlider.value = maxIts;
+	document.getElementById('init-matrix-0-0').value = 0;
+	document.getElementById('init-matrix-0-1').value = 1;
+	document.getElementById('init-matrix-1-0').value = 1;
+	document.getElementById('init-matrix-1-1').value = 1;
+	numItsSliderChange();
 }
 
 function go() {
+	initMatrix();
+	goButton.disabled = true;
 	var iteration = 0;
 	const intervalId = setInterval(() => {
 		if (iteration > maxIts) {
 			clearInterval(intervalId);
+			goButton.disabled = false;
 			return;
 		}
 		if (isWorking) {
 			return;
 		}
 		isWorking = true;
+		currIteration.innerHTML = iteration;
 		iteration++;
 
 		// console.log('iteration ' + iteration);
@@ -84,6 +95,10 @@ function displaySeq() {
 		}
 	}
 
+	canvas.width = seq[0].length;
+	canvas.height = seq.length;
+	canvas.style = `padding-left: calc(50vw - ${canvas.width / 2}px); padding-top: calc(50vh - ${canvas.height / 2}px); `;
+	imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 	for (var row in seq) {
 		for (var col in seq[row]) {
 			const val = Math.floor((seq[row][col] << 8) / max);
@@ -108,4 +123,15 @@ function drawPixel(point, rgb) {
 	imageData.data[index + 1] = rgb.g;
 	imageData.data[index + 2] = rgb.b;
 	imageData.data[index + 3] = 255;
+}
+
+function numItsSliderChange() {
+	numItsSpan.innerHTML = maxIts = numItsSlider.value;
+}
+
+function initMatrix() {
+	seq = [
+		[parseInt(document.getElementById('init-matrix-0-0').value), parseInt(document.getElementById('init-matrix-0-1').value)],
+		[parseInt(document.getElementById('init-matrix-1-0').value), parseInt(document.getElementById('init-matrix-1-1').value)],
+	];
 }

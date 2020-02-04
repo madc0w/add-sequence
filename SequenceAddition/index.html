@@ -12,26 +12,87 @@
 				color: white;
 			}
 
-			#output-table td {
-				width: 1px;
-				height: 1px;
-				/* border-radius: 3px; */
+			button {
+				cursor: pointer;
+				background-color: #fd0;
+				border-radius: 6px;
+				width: 100px;
+				margin-left: 22px;
+				margin-right: 6px;
 			}
 
-			#output-table {
+			button:hover {
+				font-weight: bold;
+			}
+
+			#controls {
+				margin-top: 12px;
+				padding: 6px;
+				border-radius: 6px;
 				border-width: 2px;
-				border-style: solid;
-				border-radius: 8px;
 				border-color: white;
-				padding: 4px;
+				border-style: solid;
+			}
+
+			#controls div,
+			table {
+				display: inline-block;
+				vertical-align: top;
+			}
+
+			#num-iterations-span {
+				width: 20px;
+				display: inline-block;
+				text-align: right;
+				padding-right: 12px;
+			}
+
+			#curr-iteration {
+				width: 20px;
+			}
+
+			#canvas-container {
+				padding-top: 12px;
+			}
+
+			#init-matrix input {
+				width: 16px;
 			}
 
 		</style>
 	</head>
 
 	<body onLoad="onLoad()">
-		<canvas id="output-canvas"></canvas>
-		<!-- <table id="output-table"> </table> -->
+		<div id="controls">
+			<div id="num-its-slider-container">
+				<div for="num-its-slider">
+					Num iterations: <div id="num-iterations-span"></div>
+				</div>
+				<input type="range" min="2" max="12" value="4" id="num-iterations-slider" onInput="numItsSliderChange()" />
+			</div>
+			<div>
+				<div id="curr-iteration"></div>
+			</div>
+			<div id="init-matrix">
+				<div>Inital matrix:</div>
+				<table>
+					<tr>
+						<td><input id="init-matrix-0-0" type="text" maxlength="1" /></td>
+						<td><input id="init-matrix-0-1" type="text" maxlength="1" /></td>
+					</tr>
+					<tr>
+						<td><input id="init-matrix-1-0" type="text" maxlength="1" /></td>
+						<td><input id="init-matrix-1-1" type="text" maxlength="1" /></td>
+					</tr>
+				</table>
+			</div>
+			<div>
+				<button id="go-button" onClick="go();">GO</button>
+			</div>
+		</div>
+		<div id="canvas-container">
+			<canvas id="output-canvas" />
+		</div>
 	</body>
 
 </html>
