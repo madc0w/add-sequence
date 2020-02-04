@@ -1,3 +1,7 @@
+// found here!  sort of...
+// https://oeis.org/A002487
+// Stern's diatomic series (or Stern-Brocot sequence)
+
 var maxIts = 8;
 var seq;
 
