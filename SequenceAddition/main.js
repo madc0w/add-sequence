@@ -1,11 +1,15 @@
-const maxIts = 5;
+const maxIts = 9;
 var seq = [[0, 1], [1, 1]];
 
-var max = 0;
-var outputTable;
+var canvas, ctx, imageData;
+var isWorking = false;
 
 function onLoad() {
-	outputTable = document.getElementById('output-table');
+	canvas = document.getElementById('output-canvas');
+	canvas.width = window.innerWidth - 20;
+	canvas.height = window.innerHeight - 20;
+	ctx = canvas.getContext('2d');
+	imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 	go();
 }
 
@@ -14,7 +18,12 @@ function go() {
 	const intervalId = setInterval(() => {
 		if (iteration > maxIts) {
 			clearInterval(intervalId);
+			return;
 		}
+		if (isWorking) {
+			return;
+		}
+		isWorking = true;
 		iteration++;
 
 		// console.log('iteration ' + iteration);
@@ -62,37 +71,41 @@ function go() {
 
 		// console.log('after vertical:');
 		displaySeq();
+		isWorking = false;
 		// console.log('finished iteration ', iteration);
 	}, 100);
 }
 
 function displaySeq() {
+	var max = 0;
 	for (var row in seq) {
 		for (var col in seq[row]) {
 			max = Math.max(max, seq[row][col]);
 		}
 	}
 
-	var html = '';
 	for (var row in seq) {
-		html += '<tr>';
 		for (var col in seq[row]) {
-			const val = Math.floor(256 * seq[row][col] / max).toString(16);
-			const color = val + val + val;
-			html += `<td style="background-color: #${color}"></td>`;
+			const val = Math.floor((seq[row][col] << 8) / max);
+			drawPixel({
+				x: parseInt(col),
+				y: parseInt(row)
+			}, {
+					r: val,
+					g: val,
+					b: val
+				}
+			);
 		}
-		html += '</tr>';
 	}
-	outputTable.innerHTML = html;
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.putImageData(imageData, 0, 0);
 }
 
-
-// function displaySeq() {
-// 	for (var i in seq) {
-// 		var row = '';
-// 		for (var j in seq[i]) {
-// 			row += seq[i][j] + '\t';
-// 		}
-// 		console.log(row);
-// 	}
-// }
+function drawPixel(point, rgb) {
+	const index = (point.x + point.y * canvas.width) * 4;
+	imageData.data[index + 0] = rgb.r;
+	imageData.data[index + 1] = rgb.g;
+	imageData.data[index + 2] = rgb.b;
+	imageData.data[index + 3] = 255;
+}
